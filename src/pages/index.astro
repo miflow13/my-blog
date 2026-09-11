@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const featured = posts.find((post) => post.data.featured) ?? posts[0];
+const latest = posts.filter((post) => post.id !== featured?.id).slice(0, 5);
+const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'short', day: '2-digit', timeZone: 'UTC'
+});
+---
+<BaseLayout>
+  <section>
+    <p class="notice"><strong>Hi, I'm Mika.</strong> I build small Linux things and write down what I learn while making them.</p>
+    <p>
+      This is where I keep notes on desktop software, Python, Fedora, design,
+      creative work, and the strange little problems that turn into projects.
+    </p>
+  </section>
+
+  {featured && (
+    <>
+      <hr />
+      <section aria-labelledby="featured-heading">
+        <p class="kicker" id="featured-heading">Featured</p>
+        <p class="featured-title"><a href={`${base}writing/${featured.id}/`}>{featured.data.title}</a></p>
+        <p class="meta">{formatDate(featured.data.date)} · {featured.data.tags.join(' / ')}</p>
+        <p>{featured.data.description}</p>
+        <p><a href={`${base}writing/${featured.id}/`}>read article →</a></p>
+      </section>
+    </>
+  )}
+
+  <hr />
+  <section aria-labelledby="latest-heading">
+    <h2 id="latest-heading">Latest writing</h2>
+    {latest.length ? (
+      <ul class="post-list">
+        {latest.map((post) => (
+          <li>
+            <span class="post-date">{formatDate(post.data.date)}</span>
+            <div>
+              <a href={`${base}writing/${post.id}/`}>{post.data.title}</a>
+              <p class="post-description">{post.data.description}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>More notes soon.</p>
+    )}
+    <p><a href={`${base}writing/`}>all writing →</a></p>
+  </section>
+
+  <hr />
+  <section>
+    <h2>Currently building</h2>
+    <p><strong>Mochi 🌱</strong> — a handcrafted Linux desktop companion for Fedora GNOME.</p>
+    <p><a href="https://miflow13.github.io/mochi-desktop/">visit Mochi</a> · <a href={`${base}projects/`}>all projects</a></p>
+  </section>
+</BaseLayout>
