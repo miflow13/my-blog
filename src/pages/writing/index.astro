@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const base = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'short', day: '2-digit', timeZone: 'UTC'
+});
+---
+<BaseLayout title="Writing" description="Notes from Mika about Linux, software, design, and creative work.">
+  <section>
+    <h2>Writing</h2>
+    <p>Build notes, lessons learned, experiments, and occasional longer thoughts.</p>
+    <ul class="post-list">
+      {posts.map((post) => (
+        <li>
+          <span class="post-date">{formatDate(post.data.date)}</span>
+          <div>
+            <a href={`${base}writing/${post.id}/`}>{post.data.title}</a>
+            <p class="post-description">{post.data.description}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
