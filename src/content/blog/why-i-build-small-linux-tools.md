@@ -4,7 +4,7 @@ description: "Tiny utilities are a good excuse to learn the parts of the desktop
 date: 2026-09-08
 tags: ["linux", "learning"]
 featured: false
-draft: false
+draft: true
 ---
 
 I learn software much faster when there is a real annoyance on the other side of the code.
