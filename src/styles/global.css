@@ -57,6 +57,22 @@ h3 {
 
 p { margin: 10px 0; }
 
+.intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.intro-photo {
+  flex: 0 0 112px;
+  width: 112px;
+  height: 112px;
+  border: 1px solid #888;
+  object-fit: cover;
+}
+
+.intro p { margin-top: 0; }
+
 .tagline,
 .meta,
 .kicker,
@@ -261,4 +277,6 @@ footer {
   h2 { font-size: 21px; }
   .article-title { font-size: 34px; }
   .post-list li { grid-template-columns: 1fr; gap: 1px; }
+  .intro { gap: 12px; }
+  .intro-photo { flex-basis: 88px; width: 88px; height: 88px; }
 }

@@ -3,8 +3,8 @@ title: "Making Mochi feel alive"
 description: "The interesting part of a desktop companion isn't playing animations. It's deciding when they should begin, when they should stop, and what should happen next."
 date: 2026-09-11
 tags: ["mochi", "linux", "python"]
-featured: true
-draft: false
+featured: false
+draft: true
 ---
 
 Mochi started as a pretty simple idea: put a tiny creature on my Linux desktop and make him react to what I'm doing.
