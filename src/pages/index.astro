@@ -7,6 +7,8 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const featured = posts.find((post) => post.data.featured) ?? posts[0];
 const latest = posts.filter((post) => post.id !== featured?.id).slice(0, 5);
+const postHref = (post: (typeof posts)[number]) => post.data.externalUrl ?? `${base}writing/${post.id}/`;
+const isExternal = (post: (typeof posts)[number]) => Boolean(post.data.externalUrl);
 const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
   year: 'numeric', month: 'short', day: '2-digit', timeZone: 'UTC'
 });
@@ -26,10 +28,10 @@ const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
       <hr />
       <section aria-labelledby="featured-heading">
         <p class="kicker" id="featured-heading">Featured</p>
-        <p class="featured-title"><a href={`${base}writing/${featured.id}/`}>{featured.data.title}</a></p>
+        <p class="featured-title"><a href={postHref(featured)}>{featured.data.title}</a></p>
         <p class="meta">{formatDate(featured.data.date)} · {featured.data.tags.join(' / ')}</p>
         <p>{featured.data.description}</p>
-        <p><a href={`${base}writing/${featured.id}/`}>read article →</a></p>
+        <p><a href={postHref(featured)}>{isExternal(featured) ? 'read on DEV Community →' : 'read article →'}</a></p>
       </section>
     </>
   )}
@@ -43,7 +45,7 @@ const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
           <li>
             <span class="post-date">{formatDate(post.data.date)}</span>
             <div>
-              <a href={`${base}writing/${post.id}/`}>{post.data.title}</a>
+              <a href={postHref(post)}>{post.data.title}{isExternal(post) ? ' ↗' : ''}</a>
               <p class="post-description">{post.data.description}</p>
             </div>
           </li>
