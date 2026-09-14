@@ -5,6 +5,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const base = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const postHref = (post: (typeof posts)[number]) => post.data.externalUrl ?? `${base}writing/${post.id}/`;
+const isExternal = (post: (typeof posts)[number]) => Boolean(post.data.externalUrl);
 const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
   year: 'numeric', month: 'short', day: '2-digit', timeZone: 'UTC'
 });
@@ -18,7 +20,7 @@ const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
         <li>
           <span class="post-date">{formatDate(post.data.date)}</span>
           <div>
-            <a href={`${base}writing/${post.id}/`}>{post.data.title}</a>
+            <a href={postHref(post)}>{post.data.title}{isExternal(post) ? ' ↗' : ''}</a>
             <p class="post-description">{post.data.description}</p>
           </div>
         </li>
